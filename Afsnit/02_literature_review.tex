@@ -1,0 +1,19 @@
+% ============================================================
+
+%  2. LITERATURE REVIEW
+
+% ============================================================
+
+\chapter{Literature Review} \label{sec:literature_review}
+
+A natural starting point is the Phillips curve, which relates inflationary pressure to labour-market slack. In its simplest form, lower unemployment rates are expected to increase wage and price pressure, thereby raising inflation. However, its forecasting performance has been shown to vary considerably across countries, time periods, and inflation regimes, casting doubt on its empirical reliability \parencite{stock_watson_2008}.
+
+A key challenge in inflation forecasting is that inflation often displays strong serial dependence, making autoregressive models a natural benchmark. In the ARIMA framework developed by \textcite{box_jenkins_1976}, differencing is applied only where necessary to achieve stationarity, while autoregressive and moving average terms capture the remaining serial dependence in the stationary series. A well-specified model of this type should produce residuals that are approximately white noise.
+
+Dynamic regression models with ARIMA errors provide a way to combine economic predictors with time-series dynamics. In a standard regression model, the error term is assumed to be white noise. In time-series applications, this assumption is often unrealistic because the regression errors may still be autocorrelated. Regression with ARIMA errors addresses this by allowing inflation to depend on explanatory variables, such as unemployment, while modelling the remaining serial correlation in the error term using an ARIMA process. This approach is therefore well suited to testing whether unemployment contains predictive information for inflation beyond what is already captured by the model's ARIMA structure.
+
+For a small open economy such as Denmark, European macroeconomic conditions may also be relevant for inflation. Danish prices can be affected by import prices, energy markets, exchange-rate arrangements, and monetary conditions in the euro area. Including such variables may therefore improve inflation forecasts, but it also increases the risk of overfitting. General-to-Specific (GETS) modelling offers a systematic way to address this by reducing a general overparameterised model by retaining the most statistically relevant variables and lags \parencite{doornik2014}.
+
+Against this background, this paper applies ARIMA benchmarking, dynamic 
+regression with ARIMA errors, and GETS variable selection to assess the 
+forecasting value of the Phillips curve for Danish inflation.

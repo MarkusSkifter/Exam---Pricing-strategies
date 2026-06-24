@@ -1,0 +1,68 @@
+\chapter{Introduction}\label{sec:introduction}
+
+The Phillips curve, originally proposed by \textcite{phillips1958} and later 
+formalised by \textcite{samuelson1960}, suggests an inverse relationship 
+between inflation and unemployment. Despite its theoretical appeal, the 
+empirical stability of this relationship has been widely debated. The curve 
+appeared to break down during the stagflation of the 1970s, and more recently, 
+the post-COVID surge in inflation has reignited the discussion of whether 
+unemployment retains meaningful predictive power over inflation dynamics 
+\parencite{stock2019}. Understanding whether labour market conditions carry 
+forecasting value for inflation is not merely an academic question — it has 
+direct implications for monetary policy and macroeconomic stabilisation.
+
+This paper investigates whether the Phillips curve relationship carries forecasting 
+value for Danish inflation. Denmark presents an interesting case: as a small open 
+economy operating under the ERM II exchange rate mechanism,\footnote{The European 
+Exchange Rate Mechanism II (ERM II) is a framework under which participating 
+non-euro area EU member states maintain their exchange rates within defined 
+fluctuation bands against the euro. Denmark has operated under ERM II since 1999, 
+effectively pegging the krone to the euro at a central rate of 7.46038 DKK per 
+euro with a narrow fluctuation band of $\pm$2.25 percent. This arrangement ties 
+Danish monetary conditions closely to those set by the European Central Bank.} 
+Danish monetary conditions are closely tied to those of the euro area. This raises 
+the question of whether broader European macroeconomic conditions carry additional 
+forecasting value for Danish inflation beyond what domestic labour market variables 
+can provide. We therefore extend the analysis beyond the domestic Phillips curve to 
+include EU27 inflation and unemployment as potential predictors.
+
+% Specifically, we ask: \textit{Can we produce more accurate forecasts of Danish 
+% inflation by incorporating unemployment data and the broader European 
+% macroeconomic environment, compared to a purely univariate benchmark?}
+
+Specifically, the reasearch question of this paper is:
+
+\textit{Can forecasts incorporating unemployment data and the broader European 
+macroeconomic environment produce more accurate predictions of Danish inflation 
+than a purely univariate benchmark?}
+
+
+To answer this question, we compare five forecasting models estimated on 
+monthly Eurostat data from December 2000 to March 2024, evaluated on a 
+24-month out-of-sample test period from April 2024 to March 2026. A univariate 
+ARIMA model serves as the benchmark, and is also estimated with structural break 
+dummies to assess whether controlling for identified level shifts improves forecast 
+accuracy. Against these two ARIMA specifications we compare three dynamic 
+regression models incorporating Danish unemployment and EU27 inflation as 
+external predictors. Variable selection is guided by a General-to-Specific (GETS) approach to 
+account for structural instability and outliers in the data 
+\parencite{doornik2014}. 
+
+% Two structural breaks in Danish 
+% inflation, identified at December 2012 and August 2021, are incorporated 
+% throughout the analysis.
+
+% The results show that the univariate ARIMA benchmark outperforms every 
+% multivariate specification out-of-sample. The GETS procedure eliminates all 
+% Danish unemployment variables as statistically insignificant, providing direct 
+% evidence against the practical forecasting value of the Phillips curve in this 
+% sample. EU27 inflation is retained by GETS and is highly significant in-sample, 
+% confirming the ERM II spillover channel, but it does not translate into improved 
+% out-of-sample forecasts during the post-surge normalisation period. These 
+% results are consistent with the broader finding in the inflation forecasting 
+% literature that multivariate models frequently fail to beat simple univariate 
+% benchmarks \parencite{stock_watson_2008}.
+
+The remainder of the paper is structured as follows. Section 2 describes the 
+data. Section 3 introduces the methodology. Section 4 presents and discusses 
+the results. Section 5 concludes.

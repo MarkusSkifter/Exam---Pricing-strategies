@@ -1,0 +1,295 @@
+# ============================================================
+# GETS DYNAMIC REGRESSION — MODEL 4
+# ============================================================
+# GUM specification:
+#   Dependent variable : dk_inflation (YoY %, modelled in levels)
+#   AR terms           : lags 1:6
+#   Selectable regressors:
+#     - diff_dk_unemployment lags 0:6  (domestic Phillips curve)
+#     - diff_ez_inflation    lags 0:6  (ERM II / EU27 channel)
+#   Fixed regressors:
+#     - surge_dummy: 1 from Apr 2021 to Jul 2023, 0 otherwise
+# ============================================================
+
+rm(list = ls())
+
+# ---- Packages ---------------------------------------------------------------
+library(tidyverse)
+library(fpp3)
+library(gets)
+library(knitr)
+library(ggplot2)
+
+# ============================================================
+# 1. Load raw data
+# ============================================================
+data_dir <- "C:/Users/MarkusSkifter/OneDrive - CBS - Copenhagen Business School/8. Semester/Predictive analytics/Predictive analytics data med kode"
+
+hicp_raw  <- read.csv(
+  file.path(data_dir, "prc_hicp_minr__custom_21465689_linear.csv"),
+  stringsAsFactors = FALSE
+)
+unemp_raw <- read.csv(
+  file.path(data_dir, "une_rt_m__custom_21465700_linear.csv"),
+  stringsAsFactors = FALSE
+)
+
+# ============================================================
+# 2. Data preparation
+# ============================================================
+parse_ym <- function(x) yearmonth(as.character(x))
+
+dk_hicp_prep <- hicp_raw %>%
+  filter(geo == "Denmark") %>%
+  mutate(yearmonth    = parse_ym(TIME_PERIOD),
+         dk_inflation = as.numeric(OBS_VALUE)) %>%
+  select(yearmonth, dk_inflation) %>%
+  arrange(yearmonth)
+
+ez_hicp_prep <- hicp_raw %>%
+  filter(geo == "European Union - 27 countries (from 2020)") %>%
+  mutate(yearmonth    = parse_ym(TIME_PERIOD),
+         ez_inflation = as.numeric(OBS_VALUE)) %>%
+  select(yearmonth, ez_inflation) %>%
+  arrange(yearmonth)
+
+dk_unemp_prep <- unemp_raw %>%
+  filter(geo == "Denmark") %>%
+  mutate(yearmonth       = parse_ym(TIME_PERIOD),
+         dk_unemployment = as.numeric(OBS_VALUE)) %>%
+  select(yearmonth, dk_unemployment) %>%
+  arrange(yearmonth)
+
+combined <- dk_hicp_prep %>%
+  left_join(dk_unemp_prep, by = "yearmonth") %>%
+  left_join(ez_hicp_prep,  by = "yearmonth") %>%
+  as_tsibble(index = yearmonth) %>%
+  drop_na() %>%
+  mutate(
+    diff_dk_unemployment = difference(dk_unemployment),
+    diff_ez_inflation    = difference(ez_inflation)
+  )
+
+cat("Combined sample:", as.character(min(combined$yearmonth)),
+    "to", as.character(max(combined$yearmonth)),
+    "(", nrow(combined), "obs)\n")
+
+dk_only    <- dk_hicp_prep %>%
+  left_join(dk_unemp_prep, by = "yearmonth") %>%
+  as_tsibble(index = yearmonth) %>%
+  drop_na()
+
+test_end   <- max(dk_only$yearmonth)
+test_start <- test_end - 23
+
+cat("Training period: up to", as.character(test_start - 1), "\n")
+cat("Test period    :", as.character(test_start),
+    "to", as.character(test_end), "(24 months)\n\n")
+
+# ============================================================
+# 3. GETS Model 4
+# ============================================================
+
+# --- 3.1 Build training data -------------------------------------------------
+MAX_LAG <- 6
+
+gets4_base <- combined %>%
+  as_tibble() %>%
+  arrange(yearmonth) %>%
+  filter(yearmonth < test_start) %>%
+  mutate(surge_dummy = as.numeric(
+    yearmonth >= yearmonth("2021 Apr") &
+      yearmonth <= yearmonth("2023 Jul")
+  )) %>%
+  filter(
+    !is.na(dk_inflation),
+    !is.na(diff_dk_unemployment),
+    !is.na(diff_ez_inflation)
+  )
+
+n4 <- nrow(gets4_base)
+y4 <- gets4_base$dk_inflation
+
+unemp_mat <- sapply(0:MAX_LAG, function(k) {
+  c(rep(NA_real_, k), gets4_base$diff_dk_unemployment[seq_len(n4 - k)])
+})
+colnames(unemp_mat) <- paste0("d_unemp_l", 0:MAX_LAG)
+
+ez_mat <- sapply(0:MAX_LAG, function(k) {
+  c(rep(NA_real_, k), gets4_base$diff_ez_inflation[seq_len(n4 - k)])
+})
+colnames(ez_mat) <- paste0("d_ez_l", 0:MAX_LAG)
+
+# surge_dummy placeres FØRST: kolonne 8 = surge_dummy (FIXED via keep=8)
+#   Kolonne 1 = mconst, 2-7 = ar1:ar6, 8 = surge_dummy, 9-22 = regressorer
+dummy_mat <- matrix(
+  gets4_base$surge_dummy, ncol = 1,
+  dimnames = list(NULL, "surge_dummy")
+)
+
+x_gum4_all <- cbind(dummy_mat, unemp_mat, ez_mat)
+
+keep4  <- complete.cases(cbind(y4, x_gum4_all))
+y_gum4 <- y4[keep4]
+x_gum4 <- x_gum4_all[keep4, ]
+
+cat("GETS training observations:", sum(keep4), "\n")
+cat("GUM: mc + ar(1:6) + surge_dummy [fixed] +",
+    ncol(unemp_mat), "unemp lags +",
+    ncol(ez_mat), "EU27 lags\n\n")
+
+# --- 3.2 Fit the General Unrestricted Model (GUM) ----------------------------
+cat("===== GUM (General Unrestricted Model) =====\n")
+gum4 <- arx(
+  y_gum4,
+  mc    = TRUE,
+  ar    = 1:MAX_LAG,
+  mxreg = x_gum4
+)
+print(gum4)
+
+# --- 3.3 GETS model selection ------------------------------------------------
+cat("\n===== GETS Model 4 (t.pval = 0.1, White robust SE) =====\n")
+# --- 3.3: fjern keep = 8 ---
+gets4 <- getsm(
+  gum4,
+  t.pval    = 0.1,
+  vcov.type = "white"
+  # ingen keep — surge_dummy kan elimineres frit
+)
+print(gets4)
+cat("\n--- Retained variables ---\n")
+print(gets4$mean.results)
+
+# --- 3.4 In-sample fit and residual diagnostics ------------------------------
+fit4          <- as.numeric(fitted.arx(gets4))
+dates4        <- gets4_base$yearmonth[keep4]
+y_aligned     <- y_gum4[(MAX_LAG + 1):length(y_gum4)]
+dates_aligned <- dates4[(MAX_LAG + 1):length(dates4)]
+resid4        <- y_aligned - fit4
+
+cat("\nIn-sample RMSE (Model 4):",
+    round(sqrt(mean(resid4^2, na.rm = TRUE)), 4), "\n")
+
+plot_df4 <- data.frame(
+  date   = dates_aligned,
+  actual = y_aligned,
+  fitted = fit4
+) %>% na.omit()
+
+ggplot(plot_df4, aes(x = date)) +
+  geom_line(aes(y = actual, colour = "Actual")) +
+  geom_line(aes(y = fitted, colour = "Fitted")) +
+  scale_colour_manual(values = c(Actual = "black", Fitted = "steelblue")) +
+  labs(title  = "Model 4 (GETS): Actual vs. Fitted",
+       x = NULL, y = "HICP Inflation (YoY, %)", colour = NULL) +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5), legend.position = "bottom")
+
+plot_df4 %>%
+  mutate(resid = actual - fitted) %>%
+  ggplot(aes(x = as.Date(date), y = resid)) +
+  geom_line(colour = "firebrick") +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey40") +
+  labs(title = "Model 4 (GETS): Residuals", x = NULL, y = "Residual") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+acf(na.omit(resid4), lag.max = 24, main = "Model 4 (GETS): ACF of Residuals")
+
+# --- 3.5 Out-of-sample forecast (conditional, recursive) --------------------
+full_series <- dk_hicp_prep %>%
+  left_join(ez_hicp_prep, by = "yearmonth") %>%
+  as_tsibble(index = yearmonth) %>%
+  mutate(diff_ez_inflation = difference(ez_inflation)) %>%
+  as_tibble() %>%
+  arrange(yearmonth) %>%
+  mutate(surge_dummy = as.numeric(
+    yearmonth >= yearmonth("2021 Apr") &
+      yearmonth <= yearmonth("2023 Jul")
+  )) %>%
+  filter(!is.na(diff_ez_inflation))
+
+test_idx4 <- which(full_series$yearmonth == test_start)
+if (length(test_idx4) == 0)
+  stop("test_start not found in full_series.")
+
+n_test4 <- sum(full_series$yearmonth >= test_start)
+cat("\nGETS forecast horizon:", n_test4, "months\n")
+
+coefs4 <- setNames(
+  gets4$mean.results[, "coef"],
+  rownames(gets4$mean.results)
+)
+
+get_y <- function(h, k, y_fc, y_full, t_start) {
+  if (h > k) y_fc[h - k] else y_full[t_start + h - 1 - k]
+}
+
+# Dynamisk forecast-loop: bruger kun variable der faktisk er i coefs4
+y_fc4 <- numeric(n_test4)
+for (h in seq_len(n_test4)) {
+  t <- test_idx4 + h - 1
+  
+  fc <- coefs4["mconst"]
+  
+  for (k in 1:MAX_LAG) {
+    ar_k <- paste0("ar", k)
+    if (ar_k %in% names(coefs4))
+      fc <- fc + coefs4[ar_k] * get_y(h, k, y_fc4, full_series$dk_inflation, test_idx4)
+  }
+  
+  for (k in 0:MAX_LAG) {
+    ez_k <- paste0("d_ez_l", k)
+    if (ez_k %in% names(coefs4))
+      fc <- fc + coefs4[ez_k] * full_series$diff_ez_inflation[t - k]
+  }
+  
+  # surge_dummy = 0 i hele testperioden (Apr 2024 frem) — bidrager ikke
+  if ("surge_dummy" %in% names(coefs4))
+    fc <- fc + coefs4["surge_dummy"] * full_series$surge_dummy[t]
+  
+  y_fc4[h] <- fc
+}
+
+# --- 3.6 Accuracy ------------------------------------------------------------
+fc4_df <- data.frame(
+  yearmonth = full_series$yearmonth[test_idx4:(test_idx4 + n_test4 - 1)],
+  actual    = full_series$dk_inflation[test_idx4:(test_idx4 + n_test4 - 1)],
+  forecast  = y_fc4
+)
+
+rmse4 <- sqrt(mean((fc4_df$actual - fc4_df$forecast)^2))
+mae4  <- mean(abs(fc4_df$actual - fc4_df$forecast))
+me4   <- mean(fc4_df$actual - fc4_df$forecast)
+
+cat("\n===== Model 4 (GETS) — Out-of-sample accuracy =====\n")
+cat("(Conditional forecast: actual EU27 inflation used as regressor)\n")
+cat(sprintf("RMSE : %.4f\n", rmse4))
+cat(sprintf("MAE  : %.4f\n", mae4))
+cat(sprintf("ME   : %.4f\n", me4))
+
+# --- 3.7 Forecast plot -------------------------------------------------------
+
+plot_history <- full_series %>%
+  filter(yearmonth >= (test_start - 36) & yearmonth < test_start) %>%
+  select(yearmonth, dk_inflation)
+
+ggplot() +
+  geom_line(data = plot_history,
+            aes(x = as.Date(yearmonth), y = dk_inflation), colour = "black") +
+  geom_line(data = fc4_df,
+            aes(x = as.Date(yearmonth), y = actual), colour = "black") +
+  geom_line(data = fc4_df,
+            aes(x = as.Date(yearmonth), y = forecast),
+            colour = "purple4", linewidth = 1) +
+  geom_vline(xintercept = as.Date(test_start),
+             linetype = "dashed", colour = "grey50") +
+  labs(
+    title    = "Model 4 (GETS): Out-of-sample Forecast vs. Actual",
+    subtitle = "Conditional on actual EU27 inflation. Dashed line = forecast origin.",
+    x = NULL, y = "HICP Inflation (YoY, %)"
+  ) +
+  theme_bw() +
+  theme(plot.title    = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
