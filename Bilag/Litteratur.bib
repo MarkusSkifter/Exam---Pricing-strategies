@@ -1,308 +1,93 @@
-%% references.bib
-%% Predictive Analytics — Phillips Curve / Inflation Forecasting assignment
-%% -----------------------------------------------------------------
-%% TEXTBOOK
-%% -----------------------------------------------------------------
+% =============================================================================
+%  References — Pricing Strategies Final Exam (BYD)
+%  Textbook + secondary press/analyst sources for BYD facts and figures.
+% =============================================================================
 
-@book{hyndman_athanasopoulos_2021,
-  author    = {Rob J. Hyndman and George Athanasopoulos},
-  title     = {Forecasting: Principles and Practice},
-  edition   = {3rd},
-  publisher = {OTexts},
-  address   = {Melbourne, Australia},
-  year      = {2021},
-  url       = {https://otexts.com/fpp3/}
+@book{nagle2018,
+  author    = {Nagle, Thomas T. and M\"uller, Georg},
+  title     = {The Strategy and Tactics of Pricing: A Guide to Growing More Profitably},
+  edition   = {8},
+  year      = {2018},
+  publisher = {Routledge},
+  address   = {New York}
 }
 
-%% -----------------------------------------------------------------
-%% PHILLIPS CURVE / INFLATION FORECASTING
-%% -----------------------------------------------------------------
-
-@techreport{stock_watson_2008,
-  author      = {James H. Stock and Mark W. Watson},
-  title       = {Phillips Curve Inflation Forecasts},
-  institution = {National Bureau of Economic Research},
-  year        = {2008},
-  type        = {Working Paper},
-  number      = {14322},
-  doi         = {10.3386/w14322}
+@online{motleyfool2025,
+  author       = {{The Motley Fool}},
+  title        = {Why {BYD} Has a Real Edge in the Global {EV} Race},
+  year         = {2025},
+  url          = {https://www.fool.com/investing/2025/10/30/why-byd-has-a-real-edge-in-the-global-ev-race/},
+  urldate      = {2026-06-27}
 }
 
-%% NOTE: verify which 2019 Stock (or Stock & Watson) paper you are citing.
-%% The most likely candidate is below. Replace if needed.
-@techreport{stock2019,
-  author      = {James H. Stock and Mark W. Watson},
-  title       = {Slack and Cyclically Sensitive Inflation},
-  institution = {National Bureau of Economic Research},
-  year        = {2019},
-  type        = {Working Paper},
-  number      = {25987},
-  doi         = {10.3386/w25987}
-}
-
-@article{atkeson_ohanian_2001,
-  author  = {Andrew Atkeson and Lee E. Ohanian},
-  title   = {Are {P}hillips Curves Useful for Forecasting Inflation?},
-  journal = {Federal Reserve Bank of Minneapolis Quarterly Review},
-  year    = {2001},
-  volume  = {25},
-  number  = {1},
-  pages   = {2--11}
-}
-
-@article{staiger_stock_watson_1997,
-  author  = {Douglas Staiger and James H. Stock and Mark W. Watson},
-  title   = {The {NAIRU}, Unemployment and Monetary Policy},
-  journal = {Journal of Economic Perspectives},
-  year    = {1997},
-  volume  = {11},
-  number  = {1},
-  pages   = {33--49},
-  doi     = {10.1257/jep.11.1.33}
-}
-
-%% -----------------------------------------------------------------
-%% ARIMA / BOX-JENKINS
-%% -----------------------------------------------------------------
-
-@book{box_jenkins_1976,
-  author    = {George E. P. Box and Gwilym M. Jenkins},
-  title     = {Time Series Analysis: Forecasting and Control},
-  publisher = {Holden-Day},
-  address   = {San Francisco},
-  year      = {1976}
-}
-
-@article{ljung_box_1978,
-  author  = {Greta M. Ljung and George E. P. Box},
-  title   = {On a Measure of Lack of Fit in Time Series Models},
-  journal = {Biometrika},
-  year    = {1978},
-  volume  = {65},
-  number  = {2},
-  pages   = {297--303},
-  doi     = {10.1093/biomet/65.2.297}
-}
-
-%% -----------------------------------------------------------------
-%% UNIT ROOT TESTS
-%% -----------------------------------------------------------------
-
-@article{dickey_fuller_1979,
-  author  = {David A. Dickey and Wayne A. Fuller},
-  title   = {Distribution of the Estimators for Autoregressive Time Series with a Unit Root},
-  journal = {Journal of the American Statistical Association},
-  year    = {1979},
-  volume  = {74},
-  number  = {366},
-  pages   = {427--431},
-  doi     = {10.2307/2286348}
-}
-
-@article{phillips_perron_1988,
-  author  = {Peter C. B. Phillips and Pierre Perron},
-  title   = {Testing for a Unit Root in Time Series Regression},
-  journal = {Biometrika},
-  year    = {1988},
-  volume  = {75},
-  number  = {2},
-  pages   = {335--346},
-  doi     = {10.1093/biomet/75.2.335}
-}
-
-@article{kpss_1992,
-  author  = {Denis Kwiatkowski and Peter C. B. Phillips and Peter Schmidt and Yongcheol Shin},
-  title   = {Testing the Null Hypothesis of Stationarity against the Alternative of a Unit Root},
-  journal = {Journal of Econometrics},
-  year    = {1992},
-  volume  = {54},
-  number  = {1--3},
-  pages   = {159--178},
-  doi     = {10.1016/0304-4076(92)90104-Y}
-}
-
-%% -----------------------------------------------------------------
-%% STRUCTURAL BREAKS
-%% -----------------------------------------------------------------
-
-@article{chow_1960,
-  author  = {Gregory C. Chow},
-  title   = {Tests of Equality Between Sets of Coefficients in Two Linear Regressions},
-  journal = {Econometrica},
-  year    = {1960},
-  volume  = {28},
-  number  = {3},
-  pages   = {591--605},
-  doi     = {10.2307/1910133}
-}
-
-@article{andrews_1993,
-  author  = {Donald W. K. Andrews},
-  title   = {Tests for Parameter Instability and Structural Change with Unknown Change Point},
-  journal = {Econometrica},
-  year    = {1993},
-  volume  = {61},
-  number  = {4},
-  pages   = {821--856},
-  doi     = {10.2307/2951764}
-}
-
-@article{bai_perron_1998,
-  author  = {Jushan Bai and Pierre Perron},
-  title   = {Estimating and Testing Linear Models with Multiple Structural Changes},
-  journal = {Econometrica},
-  year    = {1998},
-  volume  = {66},
-  number  = {1},
-  pages   = {47--78},
-  doi     = {10.2307/2998540}
-}
-
-@article{bai_perron_2003,
-  author  = {Jushan Bai and Pierre Perron},
-  title   = {Computation and Analysis of Multiple Structural Change Models},
-  journal = {Journal of Applied Econometrics},
-  year    = {2003},
-  volume  = {18},
-  number  = {1},
-  pages   = {1--22},
-  doi     = {10.1002/jae.659}
-}
-
-%% -----------------------------------------------------------------
-%% INFORMATION CRITERIA
-%% -----------------------------------------------------------------
-
-@article{akaike_1974,
-  author  = {Hirotugu Akaike},
-  title   = {A New Look at the Statistical Model Identification},
-  journal = {IEEE Transactions on Automatic Control},
-  year    = {1974},
-  volume  = {19},
-  number  = {6},
-  pages   = {716--723},
-  doi     = {10.1109/TAC.1974.1100705}
-}
-
-@article{schwarz_1978,
-  author  = {Gideon Schwarz},
-  title   = {Estimating the Dimension of a Model},
-  journal = {Annals of Statistics},
-  year    = {1978},
-  volume  = {6},
-  number  = {2},
-  pages   = {461--464},
-  doi     = {10.1214/aos/1176344136}
-}
-
-%% -----------------------------------------------------------------
-%% GRANGER CAUSALITY / VAR
-%% -----------------------------------------------------------------
-
-@article{granger_1969,
-  author  = {Clive W. J. Granger},
-  title   = {Investigating Causal Relations by Econometric Models and Cross-spectral Methods},
-  journal = {Econometrica},
-  year    = {1969},
-  volume  = {37},
-  number  = {3},
-  pages   = {424--438},
-  doi     = {10.2307/1912791}
-}
-
-%% -----------------------------------------------------------------
-%% COURSE READINGS
-%% -----------------------------------------------------------------
-
-@article{cleveland_mcgill_1985,
-  author  = {William S. Cleveland and Robert McGill},
-  title   = {Graphical Perception and Graphical Methods for Analyzing Scientific Data},
-  journal = {Science},
-  year    = {1985},
-  volume  = {229},
-  number  = {4716},
-  pages   = {828--833},
-  doi     = {10.1126/science.229.4716.828}
-}
-
-@article{makridakis_2018,
-  author  = {Spyros Makridakis and Evangelos Spiliotis and Vassilios Assimakopoulos},
-  title   = {Statistical and Machine Learning Forecasting Methods: Concerns and Ways Forward},
-  journal = {PLOS ONE},
-  year    = {2018},
-  volume  = {13},
-  number  = {3},
-  pages   = {e0194889},
-  doi     = {10.1371/journal.pone.0194889}
-}
-
-@incollection{doornik2014,
-  author    = {Jurgen A. Doornik},
-  title     = {Autometrics},
-  booktitle = {The Oxford Handbook of Economic Forecasting},
-  editor    = {Michael P. Clements and David F. Hendry},
-  publisher = {Oxford University Press},
-  address   = {Oxford},
-  year      = {2014},
-  pages     = {88--121}
-}
-%% -----------------------------------------------------------------
-%% Data sources
-%% -----------------------------------------------------------------
-
-@misc{eurostat_hicp,
-  author       = {{Eurostat}},
-  title        = {{HICP} -- monthly data (annual rate of change) [{prc\_hicp\_minr}]},
-  year         = {2026a},
-  url          = {https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_minr__custom_21465689/default/table},
-  note         = {Accessed: May 2026}
-}
-
-@misc{eurostat_unemployment,
-  author       = {{Eurostat}},
-  title        = {Unemployment by sex and age -- monthly data [{une\_rt\_m}]},
-  year         = {2026b},
-  url          = {https://ec.europa.eu/eurostat/databrowser/view/une_rt_m__custom_21465700/default/table},
-  note         = {Accessed: May 2026}
-}
-
-
-@article{phillips1958,
-  author  = {Alban William Housego Phillips},
-  title   = {The Relation Between Unemployment and the Rate of Change of Money Wage Rates in the United Kingdom, 1861--1957},
-  journal = {Economica},
-  year    = {1958},
-  volume  = {25},
-  number  = {100},
-  pages   = {283--299},
-  doi     = {10.1111/j.1468-0335.1958.tb00003.x}
-}
-
-@article{samuelson1960,
-  author  = {Paul A. Samuelson and Robert M. Solow},
-  title   = {Analytical Aspects of Anti-Inflation Policy},
-  journal = {American Economic Review},
-  year    = {1960},
-  volume  = {50},
-  number  = {2},
-  pages   = {177--194}
-}
-% Yderligere
-
-@incollection{clements2002,
-  author    = {Clements, Michael P. and Hendry, David F.},
-  title     = {Forecasting in the Presence of Structural Breaks and Policy Regime Shifts},
-  booktitle = {A Companion to Economic Forecasting},
-  editor    = {Clements, Michael P. and Hendry, David F.},
-  publisher = {Blackwell},
-  year      = {2002},
-  address   = {Oxford}
-}
-
-@misc{anthropic2026,
-  author       = {Anthropic},
+@online{byd2025,
+  author       = {{CnEVPost}},
+  title        = {{BYD} 2025 Full-Year Results: Net Profit Drops 19\% as Price War Bites},
   year         = {2026},
-  title        = {Claude (Opus 4.7, Sonnet 4.6) [Large language model]},
-  howpublished = {\url{https://claude.ai}},
-  note         = {The model was used for idea generation and linguistic sparring on punctuation and phrasing.}
+  url          = {https://cnevpost.com/2026/03/27/byd-2025-full-year-results/},
+  urldate      = {2026-06-27}
+}
+
+@online{electrekSeagull,
+  author       = {{Electrek}},
+  title        = {{BYD}'s Low-Cost Seagull {EV} Now Starts Under \$8{,}000 in China},
+  year         = {2025},
+  url          = {https://electrek.co/2025/04/08/byds-low-cost-seagull-ev-now-starts-under-8000-china/},
+  urldate      = {2026-06-27}
+}
+
+@online{carscoopsQin,
+  author       = {{Carscoops}},
+  title        = {{BYD} Launches \$11{,}000 Qin Plus {DM-i} {PHEV} in China --- ``Electricity Cheaper Than Oil''},
+  year         = {2024},
+  url          = {https://www.carscoops.com/2024/02/byd-launches-11000-qin-plus-dm-i-phev-in-china/},
+  urldate      = {2026-06-27}
+}
+
+@online{electrekU9,
+  author       = {{Electrek}},
+  title        = {{BYD} Sells Most Expensive {EV} Ever for \$3 Million (U9 Xtreme)},
+  year         = {2026},
+  url          = {https://electrek.co/2026/05/01/byd-sells-most-expensive-ev-ever-for-3-million/},
+  urldate      = {2026-06-27}
+}
+
+@online{insidechinaADAS,
+  author       = {{Inside China Auto}},
+  title        = {{BYD} Rolls Out Autonomous Driving Features Free to Entire Range},
+  year         = {2025},
+  url          = {https://insidechinaauto.com/2025/02/11/byd-rolls-out-autonomous-driving-features-free-to-entire-range/},
+  urldate      = {2026-06-27}
+}
+
+@online{ec2024,
+  author       = {{European Commission}},
+  title        = {Commission Imposes Definitive Countervailing Duties on Imports of Battery Electric Vehicles from China},
+  year         = {2024},
+  url          = {https://trade.ec.europa.eu/access-to-markets/en/news/eu-commission-imposes-countervailing-duties-imports-battery-electric-vehicles-bevs-china},
+  urldate      = {2026-06-27}
+}
+
+@online{cnbcInvolution,
+  author       = {{CNBC}},
+  title        = {Involution or Evolution? China Wants to Stop the {EV} Price War},
+  year         = {2025},
+  url          = {https://www.cnbc.com/2025/06/05/involution-or-evolution-china-wants-to-stop-the-ev-price-war-but-analysts-are-doubtful.html},
+  urldate      = {2026-06-27}
+}
+
+@online{fortuneHungary,
+  author       = {{Fortune}},
+  title        = {{BYD}'s Europe Playbook and the Hungary Manufacturing Plant},
+  year         = {2025},
+  url          = {https://fortune.com/2025/07/29/byd-china-electric-cars-europe-hungary-manufacturing/},
+  urldate      = {2026-06-27}
+}
+
+@online{restofworldWar,
+  author       = {{Rest of World}},
+  title        = {Tesla Model Y Price Cut Fails to Beat {BYD}},
+  year         = {2025},
+  url          = {https://restofworld.org/2025/tesla-model-y-byd-price-war/},
+  urldate      = {2026-06-27}
 }
